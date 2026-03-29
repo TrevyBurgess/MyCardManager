@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
 
 @Composable
 fun CardsRoute(
@@ -44,6 +46,17 @@ fun CardsScreen(
         Text(
             text = "You have ${uiState.count} cards.",
             style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CardsScreenPreview() {
+    MyCardManagerTheme {
+        CardsScreen(
+            uiState = CardsUiState(count = 3),
+            contentPadding = PaddingValues(0.dp)
         )
     }
 }

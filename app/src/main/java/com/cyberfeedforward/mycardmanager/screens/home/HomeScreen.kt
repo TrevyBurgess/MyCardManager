@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
 
 @Composable
 fun HomeRoute(
@@ -45,6 +47,20 @@ fun HomeScreen(
         Text(
             text = uiState.subtitle,
             style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    MyCardManagerTheme {
+        HomeScreen(
+            uiState = HomeUiState(
+                title = "My Card Manager",
+                subtitle = "Welcome"
+            ),
+            contentPadding = PaddingValues(0.dp)
         )
     }
 }
