@@ -15,5 +15,8 @@ fun CardsRoute(
         uiState = uiState,
         onAddCardClicked = viewModel::onAddCardClicked,
         onRemoveCardClicked = viewModel::onRemoveCardClicked,
+        onNewCardClicked = viewModel::onNewCardClicked,
+        onScannerDismissed = viewModel::onScannerDismissed,
+        onBarcodeScanned = viewModel::onBarcodeScanned,
     )
 }

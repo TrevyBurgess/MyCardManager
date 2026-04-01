@@ -10,6 +10,10 @@ Here are the commands I used for setting up the app
 
 ## Adding cards
 
+- Add a button to CardsScreen.kt called NewCard. This button will allow a user to scan a QR code or bar code and display it in the popup.
+
+
+
 - Create a page called NewCard. Add a link to the page to the CardsScreen page
 
 
