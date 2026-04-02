@@ -5,11 +5,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-sealed interface ScanResultUi {
-    data class Success(val value: String) : ScanResultUi
-    data class Error(val message: String) : ScanResultUi
-}
-
 data class CardsUiState(
     val cardCount: Int,
     val isScannerVisible: Boolean,

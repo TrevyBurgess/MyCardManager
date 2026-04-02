@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
+import androidx.camera.core.Preview as CameraPreview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.aspectRatio
@@ -22,9 +22,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.Executor
@@ -37,6 +40,7 @@ fun BarcodeScannerDialog(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val isInPreview = LocalInspectionMode.current
 
     var previewView by remember { mutableStateOf<PreviewView?>(null) }
     var scanHandled by remember { mutableStateOf(false) }
@@ -67,6 +71,7 @@ fun BarcodeScannerDialog(
     )
 
     LaunchedEffect(previewView) {
+        if (isInPreview) return@LaunchedEffect
         val view = previewView ?: return@LaunchedEffect
 
         bindCameraUseCases(
@@ -84,15 +89,31 @@ fun BarcodeScannerDialog(
     }
 
     DisposableEffect(lifecycleOwner) {
-        onDispose {
-            val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-            cameraProviderFuture.addListener(
-                {
-                    runCatching { cameraProviderFuture.get().unbindAll() }
-                },
-                ContextCompat.getMainExecutor(context),
-            )
+        if (isInPreview) {
+            onDispose { }
+        } else {
+            onDispose {
+                val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+                cameraProviderFuture.addListener(
+                    {
+                        runCatching { cameraProviderFuture.get().unbindAll() }
+                    },
+                    ContextCompat.getMainExecutor(context),
+                )
+            }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun BarcodeScannerDialogPreview() {
+    MyCardManagerTheme {
+        BarcodeScannerDialog(
+            onBarcodeScanned = {},
+            onDismiss = {},
+            onError = {},
+        )
     }
 }
 
@@ -115,7 +136,7 @@ private fun bindCameraUseCases(
                     return@addListener
                 }
 
-            val preview = Preview.Builder().build().also {
+            val preview = CameraPreview.Builder().build().also {
                 it.surfaceProvider = previewView.surfaceProvider
             }
 
@@ -151,27 +172,29 @@ private fun createBarcodeAnalyzer(
 ): ImageAnalysis.Analyzer {
     val scanner = BarcodeScanning.getClient()
 
-    return ImageAnalysis.Analyzer { imageProxy: ImageProxy ->
-        val mediaImage = imageProxy.image
-        if (mediaImage == null) {
-            imageProxy.close()
-            return@Analyzer
-        }
-
-        val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-
-        scanner.process(image)
-            .addOnSuccessListener(executor) { barcodes ->
-                val value = barcodes.firstNotNullOfOrNull { it.rawValue }
-                if (!value.isNullOrBlank()) {
-                    onResult(value)
-                }
-            }
-            .addOnFailureListener(executor) { ex ->
-                onError(ex.message ?: "Scan failed")
-            }
-            .addOnCompleteListener(executor) {
+    return object : ImageAnalysis.Analyzer {
+        override fun analyze(imageProxy: ImageProxy) {
+            val mediaImage = imageProxy.image
+            if (mediaImage == null) {
                 imageProxy.close()
+                return
             }
+
+            val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+
+            scanner.process(image)
+                .addOnSuccessListener(executor) { barcodes ->
+                    val value = barcodes.firstNotNullOfOrNull { it.rawValue }
+                    if (!value.isNullOrBlank()) {
+                        onResult(value)
+                    }
+                }
+                .addOnFailureListener(executor) { ex ->
+                    onError(ex.message ?: "Scan failed")
+                }
+                .addOnCompleteListener(executor) {
+                    imageProxy.close()
+                }
+        }
     }
 }
