@@ -24,6 +24,36 @@ class ScanHistoryStorage(
         writeArray(array)
     }
 
+    fun updateAt(
+        index: Int,
+        scan: SavedScan,
+    ): Boolean {
+        if (index < 0) return false
+
+        val array = readArrayOrEmpty()
+        if (index >= array.length()) return false
+
+        val obj = JSONObject()
+            .put("name", scan.name)
+            .put("code", scan.code)
+            .put("type", scan.type.name)
+
+        array.put(index, obj)
+        writeArray(array)
+        return true
+    }
+
+    fun deleteAt(index: Int): Boolean {
+        if (index < 0) return false
+
+        val array = readArrayOrEmpty()
+        if (index >= array.length()) return false
+
+        array.remove(index)
+        writeArray(array)
+        return true
+    }
+
     fun readAll(): List<SavedScan> {
         val array = readArrayOrEmpty()
         return buildList(array.length()) {

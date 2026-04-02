@@ -18,8 +18,13 @@ Here are the commands I used for setting up the app
 * Rename the OK button the Scanned Code page to Save. When the button is pressed, save the name, code number, and code type to a JSON file for later use.
 * Call the generated JSON file to scanned\_codes.json
 * Create a responsive grid for displaying information in CardsScreen.kt. For each entry in scanned\_codes.json, add an entry to the grid. The entry will contain name, a placeholder icon, and the scanned number
+* The previous caused an exception: please check for index out of bound exception
 * 
 * 
+* Add menu 
+* 
+* 
+* When a person clicks on an item in the CardsScreen page, open a popup showing the Name, QR code or bar code, and number
 * 
 * 
 * 
@@ -28,7 +33,6 @@ Here are the commands I used for setting up the app
 * 
 * 
 * The name in the Scanned Code popup isn't being displayed in the grid in the CardsScreen page
-* When a person clicks on an item in the CardsScreen page, open a popup showing the Name, QR code or bar code, and number
 * Remember state when the user rotates the phone
 * Refactor the code for showing the popup for showing the Name, QR code or bar code, and number. Place it into a method named CardDetailsPopup
 * When a person does a long click on an item in the CardsScreen page, open a popup menu showing menu options. Refactor this into a method called CardOpotionsPopup. Add an edit button to this menu, and a delete button

@@ -83,4 +83,118 @@ class ScanHistoryStorageTest {
             dir.deleteRecursively()
         }
     }
+
+    @Test
+    fun updateAt_updatesEntryAtIndex_andReturnsTrue() {
+        val dir = createTempDir(prefix = "scan-history-")
+        try {
+            val file = File(dir, "scanned_codes.json")
+            val storage = ScanHistoryStorage(file)
+
+            storage.append(
+                ScanHistoryStorage.SavedScan(
+                    name = "Old",
+                    code = "111",
+                    type = ScannedCodeType.Barcode1D,
+                )
+            )
+
+            val updated = storage.updateAt(
+                index = 0,
+                scan = ScanHistoryStorage.SavedScan(
+                    name = "New",
+                    code = "111",
+                    type = ScannedCodeType.Barcode1D,
+                ),
+            )
+
+            assertTrue(updated)
+            val all = storage.readAll()
+            assertEquals(1, all.size)
+            assertEquals("New", all[0].name)
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun updateAt_whenIndexOutOfBounds_returnsFalseAndDoesNotChangeFile() {
+        val dir = createTempDir(prefix = "scan-history-")
+        try {
+            val file = File(dir, "scanned_codes.json")
+            val storage = ScanHistoryStorage(file)
+
+            storage.append(
+                ScanHistoryStorage.SavedScan(
+                    name = "A",
+                    code = "111",
+                    type = ScannedCodeType.Barcode1D,
+                )
+            )
+
+            val updated = storage.updateAt(
+                index = 2,
+                scan = ScanHistoryStorage.SavedScan(
+                    name = "B",
+                    code = "222",
+                    type = ScannedCodeType.QrCode,
+                ),
+            )
+
+            assertEquals(false, updated)
+            val all = storage.readAll()
+            assertEquals(1, all.size)
+            assertEquals("A", all[0].name)
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun deleteAt_deletesEntryAtIndex_andReturnsTrue() {
+        val dir = createTempDir(prefix = "scan-history-")
+        try {
+            val file = File(dir, "scanned_codes.json")
+            val storage = ScanHistoryStorage(file)
+
+            storage.append(
+                ScanHistoryStorage.SavedScan(
+                    name = "A",
+                    code = "111",
+                    type = ScannedCodeType.Barcode1D,
+                )
+            )
+            storage.append(
+                ScanHistoryStorage.SavedScan(
+                    name = "B",
+                    code = "222",
+                    type = ScannedCodeType.QrCode,
+                )
+            )
+
+            val deleted = storage.deleteAt(0)
+
+            assertTrue(deleted)
+            val all = storage.readAll()
+            assertEquals(1, all.size)
+            assertEquals("B", all[0].name)
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun deleteAt_whenIndexOutOfBounds_returnsFalse() {
+        val dir = createTempDir(prefix = "scan-history-")
+        try {
+            val file = File(dir, "scanned_codes.json")
+            val storage = ScanHistoryStorage(file)
+
+            val deleted = storage.deleteAt(0)
+
+            assertEquals(false, deleted)
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
 }
