@@ -4,7 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.cyberfeedforward.mycardmanager.ui.host.AppHost
+import androidx.compose.ui.Modifier
+import com.cyberfeedforward.mycardmanager.ui.MainHostScreen
 import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MyCardManagerTheme {
-                AppHost()
+                MainHostScreen(modifier = Modifier)
             }
         }
     }
