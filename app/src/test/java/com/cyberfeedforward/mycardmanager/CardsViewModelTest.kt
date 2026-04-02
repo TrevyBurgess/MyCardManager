@@ -2,6 +2,7 @@ package com.cyberfeedforward.mycardmanager
 
 import com.cyberfeedforward.mycardmanager.ui.cards.CardsViewModel
 import com.cyberfeedforward.mycardmanager.ui.cards.ScanResultUi
+import com.cyberfeedforward.mycardmanager.ui.cards.ScannedCodeType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -74,12 +75,13 @@ class CardsViewModelTest {
         val viewModel = CardsViewModel()
 
         viewModel.onScanRequested()
-        viewModel.onBarcodeScanned("12345")
+        viewModel.onBarcodeScanned("12345", ScannedCodeType.QrCode)
 
         assertFalse(viewModel.uiState.value.isScannerVisible)
         val result = viewModel.uiState.value.scanResult
         assertTrue(result is ScanResultUi.Success)
         assertEquals("12345", (result as ScanResultUi.Success).value)
+        assertEquals(ScannedCodeType.QrCode, result.type)
     }
 
     @Test
@@ -99,7 +101,7 @@ class CardsViewModelTest {
     fun onScanResultDismissed_clearsResult() {
         val viewModel = CardsViewModel()
 
-        viewModel.onBarcodeScanned("abc")
+        viewModel.onBarcodeScanned("abc", ScannedCodeType.Barcode1D)
         viewModel.onScanResultDismissed()
 
         assertNull(viewModel.uiState.value.scanResult)

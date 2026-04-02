@@ -41,10 +41,13 @@ class CardsViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(isScannerVisible = false)
     }
 
-    fun onBarcodeScanned(value: String) {
+    fun onBarcodeScanned(
+        value: String,
+        type: ScannedCodeType,
+    ) {
         _uiState.value = _uiState.value.copy(
             isScannerVisible = false,
-            scanResult = ScanResultUi.Success(value = value),
+            scanResult = ScanResultUi.Success(value = value, type = type),
         )
     }
 

@@ -4,18 +4,30 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.io.File
 
 @Composable
 fun CardsRoute(
@@ -23,6 +35,17 @@ fun CardsRoute(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val storage = remember {
+        ScanHistoryStorage(
+            file = File(context.filesDir, "scanned_codes.json"),
+        )
+    }
+    var savedScans by remember { mutableStateOf(emptyList<ScanHistoryStorage.SavedScan>()) }
+
+    LaunchedEffect(Unit) {
+        savedScans = storage.readAll()
+    }
 
     var hasCameraPermission by remember {
         mutableStateOf(
@@ -45,6 +68,7 @@ fun CardsRoute(
 
     CardsScreen(
         uiState = uiState,
+        savedScans = savedScans,
         onAddCard = viewModel::onAddCard,
         onRemoveCard = viewModel::onRemoveCard,
         onScan = {
@@ -66,16 +90,20 @@ fun CardsRoute(
 
     val scanResult = uiState.scanResult
     if (scanResult != null) {
-        val message = when (scanResult) {
-            is ScanResultUi.Success -> scanResult.value
-            is ScanResultUi.Error -> scanResult.message
-        }
-
-        if (scanResult is ScanResultUi.Success) {
-            ScanResultDialog(viewModel, message)
-        }
-        else {
-            ScanFailDialog(viewModel, message)
+        when (scanResult) {
+            is ScanResultUi.Success -> {
+                ScanResultDialog(
+                    viewModel = viewModel,
+                    message = scanResult.value,
+                    type = scanResult.type,
+                    onSaved = {
+                        savedScans = storage.readAll()
+                    },
+                )
+            }
+            is ScanResultUi.Error -> {
+                ScanFailDialog(viewModel, scanResult.message)
+            }
         }
     }
 }
@@ -83,22 +111,79 @@ fun CardsRoute(
 @Composable
 private fun ScanResultDialog(
     viewModel: CardsViewModel,
-    message: String
+    message: String,
+    type: ScannedCodeType,
+    onSaved: () -> Unit,
 ) {
+    val context = LocalContext.current
+    var cardName by rememberSaveable { mutableStateOf("") }
+
+    val codeBitmap = remember(message, type) {
+        if (type.isQr) {
+            CodeImageGenerator.generateQrBitmap(
+                value = message,
+                sizePx = 512,
+            )
+        } else {
+            CodeImageGenerator.generateBarcodeBitmap(
+                value = message,
+                widthPx = 768,
+                heightPx = 256,
+            )
+        }
+    }
+
     AlertDialog(
         onDismissRequest = viewModel::onScanResultDismissed,
         confirmButton = {
-            TextButton(onClick = viewModel::onScanResultDismissed) {
-                Text(text = "OK")
+            TextButton(
+                onClick = {
+                    val storage = ScanHistoryStorage(
+                        file = File(context.filesDir, "scanned_codes.json"),
+                    )
+                    storage.append(
+                        ScanHistoryStorage.SavedScan(
+                            name = cardName,
+                            code = message,
+                            type = type,
+                        )
+                    )
+                    onSaved()
+                    viewModel.onScanResultDismissed()
+                },
+            ) {
+                Text(text = "Save")
             }
         },
         title = {
             Text(
-                text = "Scanned code"
+                text = "Scanned code",
+                fontSize = 25.sp
             )
         },
         text = {
-            Text(text = message)
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Image(
+                    bitmap = codeBitmap.asImageBitmap(),
+                    contentDescription = "Scanned code",
+                    modifier = Modifier //.size(220.dp),
+                )
+
+                Text(
+                    text = message,
+                    fontSize = 20.sp
+                    )
+
+                OutlinedTextField(
+                    value = cardName,
+                    onValueChange = { cardName = it },
+                    label = { Text(text = "Card Name") },
+                    placeholder = { Text(text = "What is your Card Name?") },
+                    singleLine = true,
+                )
+
+                Text(text = "Type: ${type.label}")
+            }
         },
     )
 }

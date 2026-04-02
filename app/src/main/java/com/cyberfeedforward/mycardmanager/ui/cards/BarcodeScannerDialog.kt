@@ -28,13 +28,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.Executor
 
 @Composable
 fun BarcodeScannerDialog(
-    onBarcodeScanned: (String) -> Unit,
+    onBarcodeScanned: (String, ScannedCodeType) -> Unit,
     onDismiss: () -> Unit,
     onError: (String) -> Unit,
 ) {
@@ -77,10 +78,10 @@ fun BarcodeScannerDialog(
         bindCameraUseCases(
             context = context,
             previewView = view,
-            onResult = { value ->
+            onResult = { value, type ->
                 if (!scanHandled) {
                     scanHandled = true
-                    onBarcodeScanned(value)
+                    onBarcodeScanned(value, type)
                 }
             },
             onError = onError,
@@ -110,7 +111,7 @@ fun BarcodeScannerDialog(
 private fun BarcodeScannerDialogPreview() {
     MyCardManagerTheme {
         BarcodeScannerDialog(
-            onBarcodeScanned = {},
+            onBarcodeScanned = { _, _ -> },
             onDismiss = {},
             onError = {},
         )
@@ -121,7 +122,7 @@ private fun BarcodeScannerDialogPreview() {
 private fun bindCameraUseCases(
     context: Context,
     previewView: PreviewView,
-    onResult: (String) -> Unit,
+    onResult: (String, ScannedCodeType) -> Unit,
     onError: (String) -> Unit,
     lifecycleOwner: androidx.lifecycle.LifecycleOwner,
 ) {
@@ -167,7 +168,7 @@ private fun bindCameraUseCases(
 @SuppressLint("UnsafeOptInUsageError")
 private fun createBarcodeAnalyzer(
     executor: Executor,
-    onResult: (String) -> Unit,
+    onResult: (String, ScannedCodeType) -> Unit,
     onError: (String) -> Unit,
 ): ImageAnalysis.Analyzer {
     val scanner = BarcodeScanning.getClient()
@@ -184,9 +185,15 @@ private fun createBarcodeAnalyzer(
 
             scanner.process(image)
                 .addOnSuccessListener(executor) { barcodes ->
-                    val value = barcodes.firstNotNullOfOrNull { it.rawValue }
-                    if (!value.isNullOrBlank()) {
-                        onResult(value)
+                    val first = barcodes.firstOrNull()
+                    val value = first?.rawValue
+                    if (!value.isNullOrBlank() && first != null) {
+                        val type = if (first.format == Barcode.FORMAT_QR_CODE) {
+                            ScannedCodeType.QrCode
+                        } else {
+                            ScannedCodeType.Barcode1D
+                        }
+                        onResult(value, type)
                     }
                 }
                 .addOnFailureListener(executor) { ex ->

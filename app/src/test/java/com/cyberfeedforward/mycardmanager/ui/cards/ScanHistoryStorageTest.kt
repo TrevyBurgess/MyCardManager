@@ -1,0 +1,86 @@
+package com.cyberfeedforward.mycardmanager.ui.cards
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import java.io.File
+
+class ScanHistoryStorageTest {
+
+    @Test
+    fun append_whenFileDoesNotExist_createsJsonArrayWithEntry() {
+        val dir = createTempDir(prefix = "scan-history-")
+        try {
+            val file = File(dir, "scanned_codes.json")
+            val storage = ScanHistoryStorage(file)
+
+            storage.append(
+                ScanHistoryStorage.SavedScan(
+                    name = "My Card",
+                    code = "12345",
+                    type = ScannedCodeType.QrCode,
+                )
+            )
+
+            val all = storage.readAll()
+            assertEquals(1, all.size)
+            assertEquals("My Card", all[0].name)
+            assertEquals("12345", all[0].code)
+            assertEquals(ScannedCodeType.QrCode, all[0].type)
+            assertTrue(file.exists())
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun append_multipleTimes_appendsEntriesInOrder() {
+        val dir = createTempDir(prefix = "scan-history-")
+        try {
+            val file = File(dir, "scanned_codes.json")
+            val storage = ScanHistoryStorage(file)
+
+            storage.append(
+                ScanHistoryStorage.SavedScan(
+                    name = "A",
+                    code = "111",
+                    type = ScannedCodeType.Barcode1D,
+                )
+            )
+            storage.append(
+                ScanHistoryStorage.SavedScan(
+                    name = "B",
+                    code = "222",
+                    type = ScannedCodeType.QrCode,
+                )
+            )
+
+            val all = storage.readAll()
+            assertEquals(2, all.size)
+            assertEquals("A", all[0].name)
+            assertEquals("111", all[0].code)
+            assertEquals(ScannedCodeType.Barcode1D, all[0].type)
+            assertEquals("B", all[1].name)
+            assertEquals("222", all[1].code)
+            assertEquals(ScannedCodeType.QrCode, all[1].type)
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun readAll_whenFileContainsInvalidJson_returnsEmptyList() {
+        val dir = createTempDir(prefix = "scan-history-")
+        try {
+            val file = File(dir, "scanned_codes.json")
+            file.writeText("not json")
+
+            val storage = ScanHistoryStorage(file)
+            val all = storage.readAll()
+
+            assertEquals(0, all.size)
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
+}
