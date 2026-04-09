@@ -28,3 +28,4 @@ Here are the commands I used for setting up the app
 * Add a button to the navigation bar called About. When pressed open a page called About.
 * Hide the home button and settings button in the navigation bar. Start app in Cards page
 * When a user presses the Edit button, allow a user to edit the QR code or bar code
+* When a user scans a new QR code, allow a user to edit the QR code or bar code

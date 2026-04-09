@@ -370,11 +370,19 @@ private fun ScanResultDialog(
 ) {
     val context = LocalContext.current
     var cardName by rememberSaveable { mutableStateOf("") }
+    var scannedCode by rememberSaveable(message) { mutableStateOf(message) }
+    var scannedTypeName by rememberSaveable(type) { mutableStateOf(type.name) }
+    val scannedType = remember(scannedTypeName) {
+        ScannedCodeType.entries.firstOrNull { it.name == scannedTypeName }
+            ?: ScannedCodeType.Barcode1D
+    }
+    var isTypeMenuExpanded by remember { mutableStateOf(false) }
 
-    val codeBitmap = remember(message, type) {
+    val codeBitmap = remember(scannedCode, scannedType) {
+        if (scannedCode.isBlank()) return@remember null
         generateCodeBitmapSafely(
-            value = message,
-            type = type,
+            value = scannedCode,
+            type = scannedType,
         )
     }
 
@@ -389,8 +397,8 @@ private fun ScanResultDialog(
                     storage.append(
                         ScanHistoryStorage.SavedScan(
                             name = cardName,
-                            code = message,
-                            type = type,
+                            code = scannedCode,
+                            type = scannedType,
                         )
                     )
                     onSaved()
@@ -412,12 +420,18 @@ private fun ScanResultDialog(
                     Image(
                         bitmap = codeBitmap.asImageBitmap(),
                         contentDescription = "Scanned code",
-                        modifier = Modifier,
+                        modifier = if (scannedType.isQr) {
+                            Modifier.size(220.dp)
+                        } else {
+                            Modifier
+                                .fillMaxWidth()
+                                .height(120.dp)
+                        },
                     )
                 }
 
                 Text(
-                    text = message,
+                    text = scannedCode,
                     fontSize = 20.sp
                     )
 
@@ -429,7 +443,37 @@ private fun ScanResultDialog(
                     singleLine = true,
                 )
 
-                Text(text = "Type: ${type.label}")
+                OutlinedTextField(
+                    value = scannedCode,
+                    onValueChange = { scannedCode = it },
+                    label = { Text(text = "Card Code") },
+                    singleLine = true,
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(text = "Type")
+                    TextButton(onClick = { isTypeMenuExpanded = true }) {
+                        Text(text = scannedType.label)
+                    }
+
+                    DropdownMenu(
+                        expanded = isTypeMenuExpanded,
+                        onDismissRequest = { isTypeMenuExpanded = false },
+                    ) {
+                        ScannedCodeType.entries.forEach { option ->
+                            DropdownMenuItem(
+                                text = { Text(text = option.label) },
+                                onClick = {
+                                    scannedTypeName = option.name
+                                    isTypeMenuExpanded = false
+                                },
+                            )
+                        }
+                    }
+                }
             }
         },
     )
