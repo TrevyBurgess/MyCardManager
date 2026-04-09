@@ -57,12 +57,6 @@ fun CardsScreen(
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Button(onClick = onAddCard) {
-                Text(text = "Add")
-            }
-            Button(onClick = onRemoveCard) {
-                Text(text = "Remove")
-            }
             Button(onClick = onScan) {
                 Text(text = "Scan")
             }
