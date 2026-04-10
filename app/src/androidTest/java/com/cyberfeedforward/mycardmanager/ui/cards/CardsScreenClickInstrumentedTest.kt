@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.cards
+package com.cyberfeedforward.loyaltycardmanager.ui.cards
 
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Text

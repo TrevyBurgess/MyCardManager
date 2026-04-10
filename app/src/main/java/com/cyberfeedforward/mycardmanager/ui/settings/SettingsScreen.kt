@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.settings
+package com.cyberfeedforward.loyaltycardmanager.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
+import com.cyberfeedforward.loyaltycardmanager.ui.theme.MyCardManagerTheme
 
 @Composable
 fun SettingsScreen(

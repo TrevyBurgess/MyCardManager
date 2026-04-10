@@ -1,6 +1,6 @@
-package com.cyberfeedforward.mycardmanager
+package com.cyberfeedforward.loyaltycardmanager
 
-import com.cyberfeedforward.mycardmanager.ui.navigation.TopLevelDestination
+import com.cyberfeedforward.loyaltycardmanager.ui.navigation.TopLevelDestination
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

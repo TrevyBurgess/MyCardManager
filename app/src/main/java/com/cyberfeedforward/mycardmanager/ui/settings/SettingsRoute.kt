@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.settings
+package com.cyberfeedforward.loyaltycardmanager.ui.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui
+package com.cyberfeedforward.loyaltycardmanager.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,9 +22,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cyberfeedforward.mycardmanager.ui.navigation.MyCardManagerNavHost
-import com.cyberfeedforward.mycardmanager.ui.navigation.TopLevelDestination
-import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
+import com.cyberfeedforward.loyaltycardmanager.ui.navigation.MyCardManagerNavHost
+import com.cyberfeedforward.loyaltycardmanager.ui.navigation.TopLevelDestination
+import com.cyberfeedforward.loyaltycardmanager.ui.theme.MyCardManagerTheme
 
 @Composable
 fun MainHostScreen(

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cyberfeedforward.mycardmanager"
+    namespace = "com.cyberfeedforward.loyaltycardmanager"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.cyberfeedforward.mycardmanager"
+        applicationId = "com.cyberfeedforward.loyaltycardmanager"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

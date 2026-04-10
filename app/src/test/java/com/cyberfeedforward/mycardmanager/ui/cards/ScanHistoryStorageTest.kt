@@ -1,15 +1,16 @@
-package com.cyberfeedforward.mycardmanager.ui.cards
+package com.cyberfeedforward.loyaltycardmanager.ui.cards
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
+import kotlin.io.path.createTempDirectory
 
 class ScanHistoryStorageTest {
 
     @Test
     fun append_whenFileDoesNotExist_createsJsonArrayWithEntry() {
-        val dir = createTempDir(prefix = "scan-history-")
+        val dir = createTempDirectory("scan-history-").toFile()
         try {
             val file = File(dir, "scanned_codes.json")
             val storage = ScanHistoryStorage(file)
@@ -35,7 +36,7 @@ class ScanHistoryStorageTest {
 
     @Test
     fun append_multipleTimes_appendsEntriesInOrder() {
-        val dir = createTempDir(prefix = "scan-history-")
+        val dir = createTempDirectory("scan-history-").toFile()
         try {
             val file = File(dir, "scanned_codes.json")
             val storage = ScanHistoryStorage(file)
@@ -70,7 +71,7 @@ class ScanHistoryStorageTest {
 
     @Test
     fun readAll_whenFileContainsInvalidJson_returnsEmptyList() {
-        val dir = createTempDir(prefix = "scan-history-")
+        val dir = createTempDirectory("scan-history-").toFile()
         try {
             val file = File(dir, "scanned_codes.json")
             file.writeText("not json")
@@ -86,7 +87,7 @@ class ScanHistoryStorageTest {
 
     @Test
     fun updateAt_updatesEntryAtIndex_andReturnsTrue() {
-        val dir = createTempDir(prefix = "scan-history-")
+        val dir = createTempDirectory("scan-history-").toFile()
         try {
             val file = File(dir, "scanned_codes.json")
             val storage = ScanHistoryStorage(file)
@@ -121,7 +122,7 @@ class ScanHistoryStorageTest {
 
     @Test
     fun updateAt_whenIndexOutOfBounds_returnsFalseAndDoesNotChangeFile() {
-        val dir = createTempDir(prefix = "scan-history-")
+        val dir = createTempDirectory("scan-history-").toFile()
         try {
             val file = File(dir, "scanned_codes.json")
             val storage = ScanHistoryStorage(file)
@@ -154,7 +155,7 @@ class ScanHistoryStorageTest {
 
     @Test
     fun deleteAt_deletesEntryAtIndex_andReturnsTrue() {
-        val dir = createTempDir(prefix = "scan-history-")
+        val dir = createTempDirectory("scan-history-").toFile()
         try {
             val file = File(dir, "scanned_codes.json")
             val storage = ScanHistoryStorage(file)
@@ -187,7 +188,7 @@ class ScanHistoryStorageTest {
 
     @Test
     fun deleteAt_whenIndexOutOfBounds_returnsFalse() {
-        val dir = createTempDir(prefix = "scan-history-")
+        val dir = createTempDirectory("scan-history-").toFile()
         try {
             val file = File(dir, "scanned_codes.json")
             val storage = ScanHistoryStorage(file)
@@ -202,7 +203,7 @@ class ScanHistoryStorageTest {
 
     @Test
     fun readAll_whenRootIsSingleJsonObject_readsSingleEntry() {
-        val dir = createTempDir(prefix = "scan-history-")
+        val dir = createTempDirectory("scan-history-").toFile()
         try {
             val file = File(dir, "scanned_codes.json")
             file.writeText(

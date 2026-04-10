@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.navigation
+package com.cyberfeedforward.loyaltycardmanager.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -6,9 +6,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.cyberfeedforward.mycardmanager.ui.about.AboutRoute
-import com.cyberfeedforward.mycardmanager.ui.cards.CardsRoute
-import com.cyberfeedforward.mycardmanager.ui.home.HomeRoute
-import com.cyberfeedforward.mycardmanager.ui.settings.SettingsRoute
+import com.cyberfeedforward.loyaltycardmanager.ui.cards.CardsRoute
+import com.cyberfeedforward.loyaltycardmanager.ui.home.HomeRoute
+import com.cyberfeedforward.loyaltycardmanager.ui.settings.SettingsRoute
 
 @Composable
 fun MyCardManagerNavHost(

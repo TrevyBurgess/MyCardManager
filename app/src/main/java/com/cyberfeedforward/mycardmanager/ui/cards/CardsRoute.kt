@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.cards
+package com.cyberfeedforward.loyaltycardmanager.ui.cards
 
 import android.Manifest
 import android.content.pm.PackageManager

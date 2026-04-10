@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.cards
+package com.cyberfeedforward.loyaltycardmanager.ui.cards
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
+import com.cyberfeedforward.loyaltycardmanager.ui.theme.MyCardManagerTheme
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage

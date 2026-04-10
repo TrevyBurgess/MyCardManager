@@ -1,6 +1,6 @@
-package com.cyberfeedforward.mycardmanager
+package com.cyberfeedforward.loyaltycardmanager
 
-import com.cyberfeedforward.mycardmanager.ui.settings.SettingsViewModel
+import com.cyberfeedforward.loyaltycardmanager.ui.settings.SettingsViewModel
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

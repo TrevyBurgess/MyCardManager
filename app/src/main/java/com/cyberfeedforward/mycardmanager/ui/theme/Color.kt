@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.theme
+package com.cyberfeedforward.loyaltycardmanager.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

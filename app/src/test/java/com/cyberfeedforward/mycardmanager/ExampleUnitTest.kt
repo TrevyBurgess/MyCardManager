@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager
+package com.cyberfeedforward.loyaltycardmanager
 
 import org.junit.Test
 

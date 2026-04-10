@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.theme
+package com.cyberfeedforward.loyaltycardmanager.ui.theme
 
 import android.app.Activity
 import android.os.Build

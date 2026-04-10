@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.cards
+package com.cyberfeedforward.loyaltycardmanager.ui.cards
 
 import android.R.attr.top
 import androidx.compose.foundation.clickable
@@ -31,7 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cyberfeedforward.mycardmanager.ui.theme.MyCardManagerTheme
+import com.cyberfeedforward.loyaltycardmanager.ui.theme.MyCardManagerTheme
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue

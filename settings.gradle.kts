@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MyCardManager"
+rootProject.name = "LoyaltyCardManager"
 include(":app")

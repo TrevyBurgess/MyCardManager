@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.home
+package com.cyberfeedforward.loyaltycardmanager.ui.home
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

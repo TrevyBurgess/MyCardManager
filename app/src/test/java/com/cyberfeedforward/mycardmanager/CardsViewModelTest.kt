@@ -1,8 +1,8 @@
-package com.cyberfeedforward.mycardmanager
+package com.cyberfeedforward.loyaltycardmanager
 
-import com.cyberfeedforward.mycardmanager.ui.cards.CardsViewModel
-import com.cyberfeedforward.mycardmanager.ui.cards.ScanResultUi
-import com.cyberfeedforward.mycardmanager.ui.cards.ScannedCodeType
+import com.cyberfeedforward.loyaltycardmanager.ui.cards.CardsViewModel
+import com.cyberfeedforward.loyaltycardmanager.ui.cards.ScanResultUi
+import com.cyberfeedforward.loyaltycardmanager.ui.cards.ScannedCodeType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

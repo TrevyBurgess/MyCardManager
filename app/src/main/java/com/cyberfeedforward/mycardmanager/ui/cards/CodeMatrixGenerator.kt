@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.cards
+package com.cyberfeedforward.loyaltycardmanager.ui.cards
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter

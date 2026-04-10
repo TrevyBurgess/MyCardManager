@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.cards
+package com.cyberfeedforward.loyaltycardmanager.ui.cards
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

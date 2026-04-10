@@ -1,4 +1,4 @@
-package com.cyberfeedforward.mycardmanager.ui.navigation
+package com.cyberfeedforward.loyaltycardmanager.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreditCard
