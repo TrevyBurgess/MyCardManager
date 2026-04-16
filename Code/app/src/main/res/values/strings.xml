@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Loyalty Card Manager</string>
+    <string name="security">Security</string>
+    <string name="about">About</string>
+</resources>
