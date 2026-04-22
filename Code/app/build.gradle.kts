@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.cyberfeedforward.loyaltycardmanager"
-    compileSdk = 37
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.cyberfeedforward.loyaltycardmanager"
@@ -23,7 +23,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }

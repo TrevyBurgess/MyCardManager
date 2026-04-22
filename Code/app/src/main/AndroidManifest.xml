@@ -8,6 +8,10 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <queries>
+        <package android:name="com.android.vending" />
+    </queries>
+
     <application
         android:name=".LoyaltyCardApplication"
         android:allowBackup="true"
