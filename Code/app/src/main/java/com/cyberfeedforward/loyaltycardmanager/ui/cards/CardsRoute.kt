@@ -518,7 +518,7 @@ private fun ScanFailDialog(
         onDismissRequest = viewModel::onScanResultDismissed,
         confirmButton = {
             TextButton(onClick = viewModel::onScanResultDismissed) {
-                Text(text = "OK-1")
+                Text(text = "OK")
             }
         },
         title = {
@@ -531,5 +531,3 @@ private fun ScanFailDialog(
         },
     )
 }
-
-

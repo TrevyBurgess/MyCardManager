@@ -47,10 +47,10 @@ fun BarcodeScannerDialog(
     val isInPreview = LocalInspectionMode.current
 
     val analysisExecutor = remember {
-        CameraExecutors.newAnalysisExecutor()
+        if (isInPreview) null else CameraExecutors.newAnalysisExecutor()
     }
     val scanner = remember {
-        BarcodeScanning.getClient()
+        if (isInPreview) null else BarcodeScanning.getClient()
     }
 
     var previewView by remember { mutableStateOf<PreviewView?>(null) }
@@ -82,9 +82,11 @@ fun BarcodeScannerDialog(
         },
     )
 
-    LaunchedEffect(previewView) {
+    LaunchedEffect(previewView, scanner, analysisExecutor) {
         if (isInPreview) return@LaunchedEffect
         val view = previewView ?: return@LaunchedEffect
+        val sc = scanner ?: return@LaunchedEffect
+        val executor = analysisExecutor ?: return@LaunchedEffect
 
         bindCameraUseCases(
             context = context,
@@ -97,8 +99,8 @@ fun BarcodeScannerDialog(
             },
             onError = onError,
             lifecycleOwner = lifecycleOwner,
-            analysisExecutor = analysisExecutor,
-            scanner = scanner,
+            analysisExecutor = executor,
+            scanner = sc,
         )
     }
 
@@ -114,12 +116,12 @@ fun BarcodeScannerDialog(
                             val cameraProvider = cameraProviderFuture.get()
                             cameraProvider.unbindAll()
                         }
-                        analysisExecutor.shutdown()
+                        analysisExecutor?.shutdown()
                     },
                     ContextCompat.getMainExecutor(context),
                 )
 
-                runCatching { scanner.close() }
+                runCatching { scanner?.close() }
             }
         }
     }

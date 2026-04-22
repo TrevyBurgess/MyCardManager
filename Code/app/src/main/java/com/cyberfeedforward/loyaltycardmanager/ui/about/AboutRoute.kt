@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +49,35 @@ fun AboutRoute(
                     + "With Loyalty Card Manager, you just scan a loyalty card and add it to your list of cards."
                     + "\n\n"
                     + "At checkout, select a loyalty card and scan it.",
-            )
+        )
+
+        Text(
+            fontSize = 36.sp,
+            text = "Managing Cards",
+            color = MaterialTheme.colorScheme.primary,
+        )
+
+        Text(
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
+            fontSize = 20.sp,
+            text = "To add a new card, click the camera button.",
+        )
+
+        Text(
+            fontSize = 25.sp,
+            text = "Note",
+            color = MaterialTheme.colorScheme.primary,
+            textDecoration = TextDecoration.Underline,
+        )
+
+        Text(
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
+            fontSize = 20.sp,
+            text = "We use the Google's API to scan bar codes. "
+                    + "However, sometimes it returns some strange characters."
+                    + "\n\n"
+                    + "Please make sure the card number is correct."
+        )
 
         Text(
             fontSize = 36.sp,
@@ -60,10 +89,8 @@ fun AboutRoute(
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
             fontSize = 20.sp,
             text = "Your card info is stored on your phone. No data is collected."
-            + "\n\n"
-            + "All data will be lost when you uninstall the app",
+                    + "\n\n"
+                    + "All data will be lost when you uninstall the app",
         )
     }
 }
-
-
